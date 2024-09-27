@@ -1,0 +1,6 @@
+@PDFScaffoldExamples_HostAddress = http://localhost:5272
+
+GET {{PDFScaffoldExamples_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
