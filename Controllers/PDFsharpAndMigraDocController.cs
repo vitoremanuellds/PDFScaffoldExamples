@@ -15,10 +15,11 @@ namespace PDFScaffoldExamples.Controllers
         [HttpGet]
         public IActionResult GetDocument()
         {
-            var lorem =
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam venenatis mattis condimentum. Sed egestas aliquam diam, at tristique sem lacinia quis. Proin rutrum, ipsum eget feugiat condimentum, nunc dui viverra nibh, nec malesuada mauris neque quis arcu. Nunc porttitor risus urna, at convallis nunc posuere vitae. Curabitur bibendum lorem vitae risus rutrum tempus. Sed sed risus ut quam tempus blandit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In hac habitasse platea dictumst. Ut quis iaculis tellus, sit amet dignissim enim. Suspendisse vel scelerisque lectus.";
             var miniLorem =
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam venenatis mattis condimentum. Sed egestas aliquam diam, at tristique sem lacinia quis. Proin rutrum, ipsum eget feugiat condimentum, nunc dui viverra nibh, nec malesuada mauris neque quis arcu.";
+            
+            var lorem =
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam venenatis mattis condimentum. Sed egestas aliquam diam, at tristique sem lacinia quis. Proin rutrum, ipsum eget feugiat condimentum, nunc dui viverra nibh, nec malesuada mauris neque quis arcu. Nunc porttitor risus urna, at convallis nunc posuere vitae. Curabitur bibendum lorem vitae risus rutrum tempus. Sed sed risus ut quam tempus blandit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In hac habitasse platea dictumst. Ut quis iaculis tellus, sit amet dignissim enim. Suspendisse vel scelerisque lectus.";
 
             var document = new Document();
 
@@ -131,6 +132,33 @@ namespace PDFScaffoldExamples.Controllers
             pdfDocumentRenderer.PdfDocument.Save(memoryStream);
             byte[] result = memoryStream.ToArray();
             memoryStream.Close();
+
+            return File(result, "application/pdf");
+        }
+
+        [HttpGet]
+        [Route("hello")]
+        public IActionResult HelloWorld()
+        {
+            var document = new Document();
+            var section = document.AddSection();
+            section.AddParagraph("Hello, World!");
+
+            var renderer = new PdfDocumentRenderer {
+              Document = document,
+              PdfDocument = {
+                PageLayout = PdfPageLayout.SinglePage,
+                ViewerPreferences = {
+                    FitWindow = true
+                }
+              }
+            };
+
+            renderer.RenderDocument();
+            var ms = new MemoryStream();
+            renderer.PdfDocument.Save(ms);
+            byte[] result = ms.ToArray();
+            ms.Close();
 
             return File(result, "application/pdf");
         }
